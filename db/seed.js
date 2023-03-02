@@ -88,6 +88,7 @@ async function createInitialUsers() {
 
 async function createInitialPosts() {
   try {
+    console.log("starting to creat posts")
     const [albert, sandra, glamgal] = await getAllUsers();
 
     await createPost({
@@ -97,6 +98,7 @@ async function createInitialPosts() {
     });
 
     // a couple more
+    console.log("finished creating posts")
     } catch (error) {
         throw error;
     }
@@ -134,14 +136,14 @@ async function testDB() {
 
     console.log("Calling getAllPosts")
     const posts = await getAllPosts()
-    console.log("Result:", posts)
+    console.log("Result posts:", posts)
 
-    // console.log("Calling updatePost on posts[0]")
-    // const updatePostResult = await updatePost(posts[0].id, {
-    //   title: "New Title",
-    //   content: "Updated Content"
-    // })
-    // console.log("Result:", updatePostResult)
+    console.log("Calling updatePost on posts[0]")
+    const updatePostResult = await updatePost(posts[0].id, {
+      title: "New Title",
+      content: "Updated Content"
+    })
+    console.log("Result:", updatePostResult)
 
     console.log("Calling getUserById with 1")
     const albert = await getUserById(1)
@@ -151,9 +153,7 @@ async function testDB() {
   } catch (error) {
     console.error("ERROR testing database!")
     throw error;
-  } finally {
-    client.end()
-  }
+  } 
 }
 
 rebuildDB()
