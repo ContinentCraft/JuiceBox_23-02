@@ -20,5 +20,10 @@ userRouter.get('/', async (req, res) => {
     })
 })
 
+userRouter.post('/login', async (req, res, next) => {
+    console.log(req.body);
+    res.end();
+});
+
 
 module.exports = userRouter

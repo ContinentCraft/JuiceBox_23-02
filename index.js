@@ -1,3 +1,4 @@
+require('dotenv').config();
 const PORT = 3000;
 const express = require("express");
 const server = express();
@@ -17,6 +18,7 @@ server.use((req, res, next) => {
   console.log("body start");
   console.log(req.body);
   console.log("body end");
+  
 
   next();
 });
