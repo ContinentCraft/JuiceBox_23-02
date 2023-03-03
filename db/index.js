@@ -53,15 +53,17 @@ async function getAllUsers() {
 }
 
 async function getUserById(userId) {
+
     const { rows } = await client.query(`
         SELECT * FROM users
         WHERE id = ${userId};
     `)
+    
     if(rows.length === 0){return null}
     else{
-        delete rows[userId-1].password
-        rows[userId-1].posts = getPostsByUser()
-        return rows
+        delete rows[0].password
+        rows[0].posts = await getPostsByUser(userId)
+        return rows[0]
     }
 }
 
@@ -247,13 +249,15 @@ async function getPostById(postid) {
 }
 
 async function getPostsByTagName(tagName) {
+    console.log(tagName, "!!!")
     try {
         const { rows: postIds } = await client.query(`
-            SELECT id FROM posts
+            SELECT posts.id FROM posts
             JOIN post_tags ON posts.id=post_tags.postid
             JOIN tags ON tags.id=post_tags.tagid
             WHERE tags.name=$1;
         `, [tagName])
+        console.log(postIds)
         return await Promise.all(postIds.map(
             post => getPostById(post.id)
         ))
