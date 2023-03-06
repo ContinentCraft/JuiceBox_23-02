@@ -1,6 +1,8 @@
-const { Client } = require('pg');
+require('dotenv').config()
 
-const client = new Client('postgres://localhost:5432/juicebox');
+const { Client } = require('pg')
+
+const client = new Client('postgres://localhost:5432/juicebox')
 
 async function createUser({ username, password, name, location }) {
     try {
@@ -278,6 +280,20 @@ async function getAllTags() {
     }
 }
 
+async function getUserByUsername(username) {
+    try {
+      const { rows: [user] } = await client.query(`
+        SELECT *
+        FROM users
+        WHERE username=$1;
+      `, [username]);
+  
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
 module.exports = {
     client,
     createUser,
@@ -293,5 +309,6 @@ module.exports = {
     addTagsToPost,
     getPostById,
     getPostsByTagName,
-    getAllTags
+    getAllTags,
+    getUserByUsername
 }
