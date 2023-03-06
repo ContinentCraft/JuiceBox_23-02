@@ -33,14 +33,20 @@ apiRouter.use(async (req, res, next) => {
     }
 })
 
+apiRouter.use((req, res, next) => {
+    if (req.user) {
+        console.log("user is set:", req.user);
+    }
+
+    next();
+})
+
 
 
 
 
 const userRouter = require('./users');
 apiRouter.use('/users', userRouter);
-
-module.exports = apiRouter;
 
 const postRouter = require('./posts');
 apiRouter.use('/posts', postRouter);

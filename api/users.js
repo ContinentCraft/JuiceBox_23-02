@@ -12,19 +12,22 @@ const userRouter = express.Router();
 
 const { getAllUsers } = require('../db')
 
-userRouter.get('/', async (req, res) => {
+userRouter.get('/', async (req, res, next) => {
     const users = await getAllUsers()
 
 
     res.send({
         users
     })
+    next()
 })
 
+const { getUserByUsername } = require('../db')
+
 userRouter.post('/login', async (req, res, next) => {
-    const { username, password } = req.body
-  
-    // request must have both
+    const { username, password } = req.body;
+    
+
     if (!username || !password) {
         next({
             name: "MissingCredentialsError",
@@ -38,8 +41,8 @@ userRouter.post('/login', async (req, res, next) => {
         const userId = user.id
   
         if (user && user.password == password) {
-            jwt.sign({userName, userId}, process.env.JWT_SECRET)
-            res.send({ message: "you're logged in!" })
+            const token = jwt.sign({userName, id:userId}, process.env.JWT_SECRET)
+            res.send({ message: "you're logged in!", token })
         } else {
             next({ 
             name: 'IncorrectCredentialsError', 

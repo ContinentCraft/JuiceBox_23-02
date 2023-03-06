@@ -2,29 +2,32 @@ require('dotenv').config();
 const PORT = 3000;
 const express = require("express");
 const server = express();
-const apiRouter = require("./api");
-server.use("/api", apiRouter);
 const morgan = require('morgan');
 server.use(morgan('dev'));
 server.use(express.json());
-const { client } = require('./db');
-client.connect();
+const apiRouter = require("./api");
+server.use("/api", apiRouter);
 
-server.listen(PORT, () => {
-  console.log("The server is up on port", PORT);
-});
 
 server.use((req, res, next) => {
   console.log("body start");
   console.log(req.body);
   console.log("body end");
   
-
+  
   next();
 });
 
+const { client } = require('./db');
+client.connect();
+server.listen(PORT, () => {
+  console.log("The server is up on port", PORT);
+});
+
+
+
 // server.use("/api", (req, res, next) => {
-//   console.log("A request was made to /api");
+  //   console.log("A request was made to /api");
 //   next();
 // });
 
