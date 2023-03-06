@@ -6,17 +6,17 @@ const { getUserById } = require('../db');
 const { JWT_SECRET } = process.env;
 
 apiRouter.use(async (req, res, next) => {
-    const prefix = 'Bearer';
+    const prefix = 'Bearer ';
     const auth = req.header('Authorization')
-
+    console.log(auth, "!!")
     if (!auth) {
         next();
     } else if (auth.startsWith(prefix)) {
         const token = auth.slice(prefix.length);
-
+console.log(token,"!!!!", JWT_SECRET )
         try {
             const { id } =jwt.verify(token, JWT_SECRET)
-
+console.log(id, "@@@")
 
             if (id) {
                 req.user = await getUserById(id);
