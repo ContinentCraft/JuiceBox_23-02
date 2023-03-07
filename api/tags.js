@@ -8,13 +8,16 @@ const { getAllTags, getPostsByTagName } = require('../db')
 
 
 
-tagsRouter.get('/', async (req, res) => {
-    const tags = await getAllTags();
-
-
-    res.send({
-        tags
-    })
+tagsRouter.get('/:tagName/posts', async (req, res, next) => {
+    try{
+        const tags = await getAllTags();
+        console.log(tags, "!!")
+        res.send({
+            tags
+        })
+    }catch({name, message}){
+        next({name, message})
+    }
 })
 
 module.exports = tagsRouter
